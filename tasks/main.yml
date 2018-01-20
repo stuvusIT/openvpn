@@ -1,3 +1,38 @@
 ---
+- name: Install OpenVPN
+  import_tasks: install.yml
+  tags:
+    - install
 
-...
+- name: Copy or Generate server keys
+  import_tasks: server_keys.yml
+  tags:
+    - server_keys
+
+- name: Enable ipv4 forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+
+- name: Enable ipv6 forwarding
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: 1
+  when: openvpn_server_ipv6_network is defined
+
+- name: Generate client configs
+  include_tasks: client_keys.yml
+  when: clients is defined or openvpn_use_ldap
+  tags:
+    - client_keys
+
+- name: Generate revocation list and clean up
+  include_tasks: revocation.yml
+  when: openvpn_revoke_these_certs is defined
+  tags:
+    - revocation
+
+- name: Configure OpenVPN
+  import_tasks: config.yml
+  tags:
+    - configure

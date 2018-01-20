@@ -1,0 +1,7 @@
+#!/bin/sh
+# {{ ansible_managed }}
+brctl addbr {{ openvpn_bridge_dev }}; true
+brctl addif {{ openvpn_bridge_dev }} {{ openvpn_dev }}; true
+brctl addif {{ openvpn_bridge_dev }} {{ openvpn_interface }}; true
+ip l set {{ openvpn_bridge_dev }} up;
+ip l set {{ openvpn_dev }} up;
