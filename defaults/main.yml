@@ -37,7 +37,7 @@ openvpn_bridge_dev: br0
 openvpn_dns_servers:
   - "8.8.8.8"
   - "8.8.4.4"
-openvpn_openssl_digest: sha512
+openvpn_openssl_digest: sha256
 openvpn_openssl_days: 3650
 openvpn_auth_hash_algo: SHA256
 openvpn_cipher: AES-256-CBC
