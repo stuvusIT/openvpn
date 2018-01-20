@@ -32,7 +32,7 @@ openvpn_bridge:
   network: 192.168.0.0
   broadcast: 192.168.0.255
   dhcp_start: 192.168.0.2
-  dhcp_end: 192.16.0.254
+  dhcp_end: 192.168.0.254
 openvpn_bridge_dev: br0
 openvpn_dns_servers:
   - "8.8.8.8"

@@ -47,7 +47,7 @@
 - name: Register client keys
   slurp:
     src: "{{ openvpn_key_dir }}/{{ item }}.key"
-    with_items: "{{ openvpn_clients }}"
+  with_items: "{{ openvpn_clients }}"
   register: client_keys
 
 - name: Generate client config
@@ -77,7 +77,7 @@
     src: "{{ openvpn_base_dir }}/{{ item }}-{{ inventory_hostname }}.ovpn"
     dest: "/tmp/ansible/{{ item }}/{{ inventory_hostname }}.ovpn"
     flat: yes
-  with_items: "{{ openpvn_clients }}"
+  with_items: "{{ openvpn_clients }}"
 
 - name: Fetch client config
   when: openvpn_use_ldap

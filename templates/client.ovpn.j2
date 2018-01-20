@@ -25,10 +25,7 @@ persist-key
 persist-tun
 verb 3
 
-{% if openvpn_use_ldap %}
 auth-user-pass
-{% endif %}
-
 route-method exe
 route-delay 2
 {% if openvpn_client_register_dns %}
@@ -44,7 +41,7 @@ key-direction 1
 {{ tls_auth.content|b64decode }}
 </tls-auth>
 
-{% if not openvpn_use_ldap %}
+{% if item is defined %}
 <cert>
 {{ item.0.content|b64decode }}
 </cert>

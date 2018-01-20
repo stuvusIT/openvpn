@@ -22,7 +22,7 @@
 
 - name: Generate client configs
   include_tasks: client_keys.yml
-  when: clients is defined or openvpn_use_ldap
+  when: openvpn_clients is defined or openvpn_use_ldap
   tags:
     - client_keys
 
