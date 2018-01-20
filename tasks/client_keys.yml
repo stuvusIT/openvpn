@@ -9,7 +9,7 @@
     mode: 0400
 
 - name: Generate client key
-  command: "openssl req -nodes -newkey rsa:{{ openvpn_rsa_bits }} -keyout {{ item }}.key -out {{ item }}.csr -days 3650 -subj /CN=OpenVPN-Client-{{  inventory_hostname[:24]  }}-{{  item[:24]  }}/"
+  command: "openssl req -nodes -newkey rsa:{{ openvpn_rsa_bits }} -keyout {{ item }}.key -out {{ item }}.csr -days {{ openvpn_openssl_days }} -{{ openvpn_openssl_digest }} -subj /CN=OpenVPN-Client-{{  inventory_hostname[:24]  }}-{{  item[:24]  }}/"
   args:
     chdir: "{{ openvpn_key_dir }}"
     creates: "{{ item }}.key"
@@ -19,10 +19,12 @@
   file:
     path: "{{ openvpn_key_dir }}/{{ item }}.key"
     mode: 0400
+    owner: root
+    group: root
   with_items: "{{ openvpn_clients }}"
 
 - name: Sign client key
-  command: openssl x509 -req -in {{ item }}.csr -out {{ item }}.crt -CA ca.crt -CAkey ca-key.pem -sha256 -days 3650 -extfile openssl-client.ext
+  command: openssl x509 -req -in {{ item }}.csr -out {{ item }}.crt -CA ca.crt -CAkey ca-key.pem -{{ openvpn_openssl_digest }} -days {{ openvpn_openssl_days }} -extfile openssl-client.ext
   args:
     chdir: "{{ openvpn_key_dir }}"
     creates: "{{ item }}.crt"
@@ -51,37 +53,37 @@
   register: client_keys
 
 - name: Generate client config
-  when: openvpn_clients is defined
   template:
     src: client.ovpn.j2
-    dest: "{{  openvpn_base_dir  }}/{{ item.0.item }}-{{ inventory_hostname }}.ovpn"
+    dest: "{{ openvpn_base_dir }}/{{ item.0.item }}-{{ inventory_hostname }}.ovpn"
     owner: root
     group: root
     mode: 0400
+  when: openvpn_clients is defined
   with_together:
     - "{{ client_certs.results }}"
     - "{{ client_keys.results }}"
 
 - name: Generate client config for ldap auth
-  when: openvpn_use_ldap
   template:
     src: client.ovpn.j2
     dest: "{{  openvpn_base_dir  }}/generell-{{ inventory_hostname }}.ovpn"
     owner: root
     group: root
     mode: 0400
+  when: openvpn_ldap is defined
 
 - name: Fetch client config
-  when: openvpn_clients is defined
   fetch:
     src: "{{ openvpn_base_dir }}/{{ item }}-{{ inventory_hostname }}.ovpn"
     dest: "/tmp/ansible/{{ item }}/{{ inventory_hostname }}.ovpn"
     flat: yes
+  when: openvpn_clients is defined
   with_items: "{{ openvpn_clients }}"
 
-- name: Fetch client config
-  when: openvpn_use_ldap
+- name: Fetch public client config without certs
   fetch:
     src: "{{  openvpn_base_dir  }}/generell-{{ inventory_hostname }}.ovpn"
     dest: "/tmp/{{ inventory_hostname }}.ovpn"
     flat: yes
+  when: openvpn_ldap is defined

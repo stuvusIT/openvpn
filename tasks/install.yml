@@ -11,7 +11,7 @@
   package:
    name: openvpn-auth-ldap
    state: present
-  when: openvpn_use_ldap
+  when: openvpn_ldap is defined
 
 - name: Ensure group 'nogroup' is present
   group:

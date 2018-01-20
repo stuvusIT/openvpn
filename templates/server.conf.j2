@@ -26,8 +26,8 @@ crl-verify {{openvpn_key_dir}}/ca-crl.pem
 tls-auth {{openvpn_key_dir}}/ta.key 0
 {% endif %}
 tls-server
-auth SHA256
-cipher AES-256-CBC
+auth {{ openvpn_auth_hash_algo }}
+cipher {{ openvpn_cipher }}
 {% if openvpn_use_modern_tls|bool %}
 {# Using Mozilla's modern cipher list + DHE for older clients #}
 tls-version-min 1.2
@@ -68,7 +68,9 @@ push "{{ opt }}"
 {% endfor %}
 {% endif %}
 keepalive 5 30
+{% if openvpn_use_lzo %}
 comp-lzo
+{% endif %}
 persist-key
 persist-tun
 user nobody
@@ -90,7 +92,7 @@ management-client-user {{openvpn_management_client_user}}
 {% endif %}
 {% endif %}
 
-{% if openvpn_use_ldap|bool %}
+{% if openvpn_ldap is defined|bool %}
 ### LDAP AUTH ###
 plugin /usr/lib/openvpn/openvpn-auth-ldap.so "{{ openvpn_base_dir }}/auth/ldap.conf"
 client-cert-not-required

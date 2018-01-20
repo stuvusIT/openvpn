@@ -37,18 +37,9 @@ openvpn_bridge_dev: br0
 openvpn_dns_servers:
   - "8.8.8.8"
   - "8.8.4.4"
+openvpn_openssl_digest: sha512
+openvpn_openssl_days: 3650
+openvpn_auth_hash_algo: SHA256
+openvpn_cipher: AES-256-CBC
+openvpn_use_lzo: true
 
-# LDAP configuration
-openvpn_use_ldap: false
-openvpn_ldap:
-  url: ldap://host.example.com
-  anonymous_bind: False
-  bind_dn: uid=Manager,ou=People,dc=example,dc=com
-  bind_password: mysecretpassword
-  tls_enable: no
-  tls_ca_cert_file: "{{ openvpn_base_dir }}/auth/ca.pem"
-  base_dn: ou=People,dc=example,dc=com
-  search_filter: (&(uid=%u)(accountStatus=active))
-  require_group: False
-  group_base_dn: ou=Groups,dc=example,dc=com
-  group_search_filter: (|(cn=developers)(cn=artists))

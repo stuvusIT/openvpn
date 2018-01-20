@@ -10,9 +10,9 @@ database = $dir/index.txt
 crlnumber = $dir/crl_number
 certificate = $dir/ca.crt
 private_key = $dir/ca-key.pem
-default_days = 3650
+default_days = {{ openvpn_openssl_days }}
 default_crl_days = 30
-default_md = sha256
+default_md = {{ openvpn_openssl_digest }}
 preserve = no
 
 [ crl_ext ]
