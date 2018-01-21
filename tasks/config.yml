@@ -1,0 +1,47 @@
+- name: Set openvpn service name - systemd
+  set_fact:
+    openvpn_service_name: "openvpn@{{openvpn_config_file}}.service"
+  when: ansible_service_mgr == "systemd"
+
+- name: Create openvpn config file
+  template:
+    src: server.conf.j2
+    dest: "{{ openvpn_base_dir }}/{{ openvpn_config_file }}.conf"
+    owner: root
+    group: root
+  notify:
+    - Restart openvpn
+
+- name: Install LDAP config
+  template:
+    src: ldap.conf.j2
+    dest: "{{ openvpn_base_dir }}/auth/ldap.conf"
+    owner: root
+    group: root
+  when: openvpn_ldap is defined
+
+- name: Copy openvpn logrotate config file
+  copy:
+    src: openvpn_logrotate.conf
+    dest: /etc/logrotate.d/openvpn.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Setup bridge
+  when: openvpn_use_bridge
+  template:
+    src: up.sh.j2
+    dest: "{{ openvpn_base_dir }}/up.sh"
+
+- name: Remove bridge
+  file:
+    path: "{{ openvpn_base_dir }}/up.sh"
+    state: absent
+  when: not openvpn_use_bridge
+
+- name: Setup openvpn auto-start & start
+  service:
+    name: "{{ openvpn_service_name }}"
+    enabled: yes
+    state: started

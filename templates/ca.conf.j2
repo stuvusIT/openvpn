@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir = {{ openvpn_key_dir }}
+certs = $dir/
+new_certs_dir = $dir/
+database = $dir/index.txt
+crlnumber = $dir/crl_number
+certificate = $dir/ca.crt
+private_key = $dir/ca-key.pem
+default_days = {{ openvpn_openssl_days }}
+default_crl_days = 30
+default_md = {{ openvpn_openssl_digest }}
+preserve = no
+
+[ crl_ext ]
+authorityKeyIdentifier=keyid:always,issuer:always
+

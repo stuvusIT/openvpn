@@ -1,0 +1,59 @@
+client
+
+tls-client
+auth {{ openvpn_auth_hash_algo }}
+cipher i{{ openvpn_cipher }}
+remote-cert-tls server
+{% if openvpn_use_modern_tls %}
+tls-version-min 1.2
+{% endif %}
+
+proto {{openvpn_proto}}
+remote {{openvpn_server_hostname}} {{openvpn_port}}
+{% if openvpn_use_bridge %}
+dev tap
+{% else %}
+dev tun
+{% endif %}
+
+
+resolv-retry 5
+nobind
+keepalive 5 30
+{% if openvpn_use_lzo %}
+comp-lzo
+{% endif %}
+persist-key
+persist-tun
+verb 3
+
+auth-user-pass
+route-method exe
+route-delay 2
+{% if openvpn_client_register_dns %}
+register-dns
+{% endif %}
+
+key-direction 1
+<ca>
+{{ ca_cert.content|b64decode }}
+</ca>
+
+<tls-auth>
+{{ tls_auth.content|b64decode }}
+</tls-auth>
+
+{% if item is defined %}
+<cert>
+{{ item.0.content|b64decode }}
+</cert>
+
+<key>
+{{ item.1.content|b64decode }}
+</key>   
+{% endif %}
+
+
+{% if openvpn_verify_cn|bool %}
+verify-x509-name OpenVPN-Server-{{inventory_hostname[:49]}} name
+{% endif %}
