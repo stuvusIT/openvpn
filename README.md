@@ -55,19 +55,19 @@ This role requires an apt based system.
 
 ### LDAP object
 
-| Variable            | Default / Mandatory                       | Description                                                                                    |
-|---------------------|-------------------------------------------|------------------------------------------------------------------------------------------------|
-| url                 | `ldap://host.example.com`                 | Address of you LDAP backend with syntax ldap[s]://host[:port]                                  |
+| Variable            | Default / Mandatory                       | Description                                                                                 |
+|---------------------|-------------------------------------------|---------------------------------------------------------------------------------------------|
+| url                 | `ldap://host.example.com`                 | Address of you LDAP backend with syntax ldap[s]://host[:port]                               |
 | anonymous_bind      | `False`                                   | This is not an Ansible boolean but a string that will be pushed into the configuration file |
-| bind_dn             | `uid=Manager,ou=People,dc=example,dc=com` | Bind DN used if "anonymous_bind" set to "False"                                                |
-| bind_password       | `mysecretpassword`                        | Password of the bind_dn user                                                                   |
-| tls_enable          | `no`                                      | Force TLS encryption. Not necessary with ldaps addresses                                       |
-| tls_ca_cert_file    | `/etc/openvpn/auth/ca.pem`                | Path to the CA ldap backend. This must have been pushed before                             |
-| base_dn             | `ou=People,dc=example,dc=com`             | Base DN where the backend will look for valid user                                             |
-| search_filter       | `(&(uid=%u)(accountStatus=active))`       | Filter the ldap search                                                                         |
+| bind_dn             | `uid=Manager,ou=People,dc=example,dc=com` | Bind DN used if "anonymous_bind" set to "False"                                             |
+| bind_password       | `mysecretpassword`                        | Password of the bind_dn user                                                                |
+| tls_enable          | `no`                                      | Enable STARTTLS. Not necessary with ldaps addresses                                         |
+| tls_ca_cert_file    | `/etc/openvpn/auth/ca.pem`                | Path to the CA ldap backend. This must have been pushed before                              |
+| base_dn             | `ou=People,dc=example,dc=com`             | Base DN where the backend will look for valid user                                          |
+| search_filter       | `(&(uid=%u)(accountStatus=active))`       | Filter the ldap search                                                                      |
 | require_group       |                                           | This is not an Ansible boolean but a string that will be pushed into the configuration file |
-| group_base_dn       | `ou=Groups,dc=example,dc=com`             | Precise the group to look for. Required if require_group is set to   "True"                    |
-| group_search_filter | `((cn=developers)(cn=artists))`           | Precise valid groups                                                                           |
+| group_base_dn       | `ou=Groups,dc=example,dc=com`             | Precise the group to look for. Required if require_group is set to   "True"                 |
+| group_search_filter | `((cn=developers)(cn=artists))`           | Precise valid groups                                                                        |
 
 ### openvpn_bridge
 
