@@ -73,7 +73,8 @@ This role requires an apt based system.
 
 | Variable   | Default / Mandatory | Description                                  |
 |------------|---------------------|----------------------------------------------|
-| address    | `192.168.0.1`       | Address of the vpn server in the network     |
+| address    | `192.168.0.2`       | Address of the vpn server in the network     |
+| gateway    | `192.168.0.1`       | Gateway Address for the clients              |
 | netmask    | `255.255.255.0`     | Netmask of the bridge network                |
 | network    | `192.168.0.0`       | Address of the bridge network                |
 | broadcast  | `192.168.0.255`     | Broadcast address                            |

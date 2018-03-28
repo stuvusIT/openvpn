@@ -45,7 +45,7 @@ server-ipv6 {{openvpn_server_ipv6_network}}
 {% endif %}
 {% endif %}
 {% if openvpn_use_bridge %}
-server-bridge {{ openvpn_bridge.address }} {{ openvpn_bridge.netmask }} {{ openvpn_bridge.dhcp_start }} {{ openvpn_bridge.dhcp_end }}
+server-bridge {{ openvpn_bridge.gateway }} {{ openvpn_bridge.netmask }} {{ openvpn_bridge.dhcp_start }} {{ openvpn_bridge.dhcp_end }}
 up up.sh
 {% endif %}
 
