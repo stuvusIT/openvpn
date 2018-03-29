@@ -9,25 +9,25 @@
     mode: 0400
 
 - name: Generate client key
-  command: "openssl req -nodes -newkey rsa:{{ openvpn_rsa_bits }} -keyout {{ item }}.key -out {{ item }}.csr -days {{ openvpn_openssl_days }} -{{ openvpn_openssl_digest }} -subj /CN=OpenVPN-Client-{{  inventory_hostname[:24]  }}-{{  item[:24]  }}/"
+  command: "openssl req -nodes -newkey rsa:{{ openvpn_rsa_bits }} -keyout {{ item.name }}.key -out {{ item.name }}.csr -days {{ openvpn_openssl_days }} -{{ openvpn_openssl_digest }} -subj /CN=OpenVPN-Client-{{  inventory_hostname[:24]  }}-{{  item.name[:24]  }}/"
   args:
     chdir: "{{ openvpn_key_dir }}"
-    creates: "{{ item }}.key"
+    creates: "{{ item.name }}.key"
   with_items: "{{ openvpn_clients }}"
 
 - name: Protect client keys
   file:
-    path: "{{ openvpn_key_dir }}/{{ item }}.key"
+    path: "{{ openvpn_key_dir }}/{{ item.name }}.key"
     mode: 0400
     owner: root
     group: root
   with_items: "{{ openvpn_clients }}"
 
 - name: Sign client key
-  command: openssl x509 -req -in {{ item }}.csr -out {{ item }}.crt -CA ca.crt -CAkey ca-key.pem -{{ openvpn_openssl_digest }} -days {{ openvpn_openssl_days }} -extfile openssl-client.ext
+  command: openssl x509 -req -in {{ item.name }}.csr -out {{ item.name }}.crt -CA ca.crt -CAkey ca-key.pem -{{ openvpn_openssl_digest }} -days {{ openvpn_openssl_days }} -extfile openssl-client.ext
   args:
     chdir: "{{ openvpn_key_dir }}"
-    creates: "{{ item }}.crt"
+    creates: "{{ item.name }}.crt"
   with_items: "{{ openvpn_clients }}"
 
 - name: Register server ca key
@@ -42,20 +42,20 @@
 
 - name: Register client certs
   slurp:
-    src: "{{ openvpn_key_dir }}/{{ item }}.crt"
+    src: "{{ openvpn_key_dir }}/{{ item.name }}.crt"
   with_items: "{{ openvpn_clients }}"
   register: client_certs
 
 - name: Register client keys
   slurp:
-    src: "{{ openvpn_key_dir }}/{{ item }}.key"
+    src: "{{ openvpn_key_dir }}/{{ item.name }}.key"
   with_items: "{{ openvpn_clients }}"
   register: client_keys
 
 - name: Generate client config
   template:
     src: client.ovpn.j2
-    dest: "{{ openvpn_base_dir }}/{{ item.0.item }}-{{ inventory_hostname }}.ovpn"
+    dest: "{{ openvpn_base_dir }}/{{ item.0.item.name }}-{{ inventory_hostname }}.ovpn"
     owner: root
     group: root
     mode: 0400
@@ -75,8 +75,8 @@
 
 - name: Fetch client config
   fetch:
-    src: "{{ openvpn_base_dir }}/{{ item }}-{{ inventory_hostname }}.ovpn"
-    dest: "/tmp/ansible/{{ item }}/{{ inventory_hostname }}.ovpn"
+    src: "{{ openvpn_base_dir }}/{{ item.name }}-{{ inventory_hostname }}.ovpn"
+    dest: "/tmp/ansible/{{ item.name }}/{{ inventory_hostname }}.ovpn"
     flat: yes
   when: openvpn_clients is defined
   with_items: "{{ openvpn_clients }}"
