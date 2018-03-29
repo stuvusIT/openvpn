@@ -28,11 +28,23 @@
     group: root
     mode: 0644
 
+- name: Create client-config-dir
+  file:
+    path: "{{ openvpn_base_dir }}/staticclients"
+    state: directory
+
+- name: Write client configs to client-config-dir
+  template:
+    src: staticclient.j2
+    dest: "{{ openvpn_base_dir }}/staticclients/OpenVPN-Client-{{  inventory_hostname[:24]  }}-{{  item.name[:24]  }}"
+  with_items: "{{ openvpn_clients }}"
+
 - name: Setup bridge
   when: openvpn_use_bridge
   template:
     src: up.sh.j2
     dest: "{{ openvpn_base_dir }}/up.sh"
+    mode: 0755
 
 - name: Remove bridge
   file:

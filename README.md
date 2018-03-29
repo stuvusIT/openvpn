@@ -43,7 +43,7 @@ This role requires an apt based system.
 | openvpn_use_crl                    |                                                  | Configure OpenVPN server to honor certificate revocation list.                                                                                                  |
 | openvpn_client_register_dns        | `true`                                           | Add `register-dns` option to client config (Windows only).                                                                                                      |
 | openvpn_duplicate_cn               | `false`                                          | Add `duplicate-cn` option to server config - this allows clients to connect multiple times with the one key.                                                    |
-| openvpn_clients                    | `[]`                                             | List of client names for which certificates should be generated                                                                                                 |
+| openvpn_clients                    | `[]`                                             | List of client objects for which certificates should be generated. For more information see below                                                               |
 | openvpn_bridge_dev                 | `br0`                                            | Name of the bridge interface beeing used for bridging                                                                                                           |
 | openvpn_bridge                     |                                                  | Bridge settings to be configured for defaults see below                                                                                                         |
 | openvpn_dns_servers                | `["8.8.8.8","8.8.4.4"]`                          | List of DNS servers to push to the client                                                                                                                       |
@@ -52,6 +52,15 @@ This role requires an apt based system.
 | openvpn_openssl_digest             | `sha256`                                         | Digest Algorithm to use when signing and creating certs.                                                                                                        |
 | openvpn_openssl_days               | `3650`                                           | How many days are the certs valid.                                                                                                                              |
 | openvpn_use_lzo                    | `true`                                           | Enable or disable compression.                                                                                                                                  |
+
+### Client object
+
+| Variable   | Default / Mandatory    | Description                                                     |
+|------------|------------------------|-----------------------------------------------------------------|
+| name       | :heavy_check_mark:     | Name of the client. Has to be unique                            |
+| ip_address | :heavy_multiplication: | IP Address given to ifconfig-push                               |
+| subnet     | :heavy_multiplication: | Subnet given to ifconfig-push                                   |
+| push       | `[]`                   | List of strings to be used with the push command for the client |
 
 ### LDAP object
 

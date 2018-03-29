@@ -53,6 +53,9 @@ up up.sh
 topology {{openvpn_topology}}
 {% endif %}
 ifconfig-pool-persist ipp.txt
+{% if openvpn_clients %}
+client-config-dir {{ openvpn_base_dir }}/staticclients
+{% endif %}
 
 {% if openvpn_redirect_gateway|bool %}
 push "redirect-gateway def1 bypass-dhcp"
