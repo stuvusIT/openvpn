@@ -6,6 +6,7 @@
     - openvpn
     - openssl
     - iptables
+    - bridge-utils
 
 - name: Install LDAP plugin
   package:
