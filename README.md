@@ -53,6 +53,7 @@ This role requires an apt based system.
 | openvpn_openssl_days               | `3650`                                           | How many days are the certs valid.                                                                                                                              |
 | openvpn_use_lzo                    | `true`                                           | Enable or disable compression.                                                                                                                                  |
 | openvpn_tls_cipher                 |                                                  | List of TLS Cipher to support                                                                                                                                   |
+| openvpn_client_cert_only_auth      | `false`                                          | Use only certificates to authenticate clients                                                                                                                   |
 
 ### Client object
 

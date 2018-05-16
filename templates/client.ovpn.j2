@@ -27,7 +27,9 @@ persist-key
 persist-tun
 verb 3
 
+{% if not openvpn_client_cert_only_auth %}
 auth-user-pass
+{% endif %}
 route-method exe
 route-delay 2
 {% if openvpn_client_register_dns %}
