@@ -43,4 +43,4 @@ openvpn_auth_hash_algo: SHA256
 openvpn_cipher: AES-256-CBC
 openvpn_use_lzo: true
 openvpn_default_client_push: []
-
+openvpn_client_cert_only_auth: false
