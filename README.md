@@ -52,6 +52,7 @@ This role requires an apt based system.
 | openvpn_openssl_digest             | `sha256`                                         | Digest Algorithm to use when signing and creating certs.                                                                                                        |
 | openvpn_openssl_days               | `3650`                                           | How many days are the certs valid.                                                                                                                              |
 | openvpn_use_lzo                    | `true`                                           | Enable or disable compression.                                                                                                                                  |
+| openvpn_tls_cipher                 |                                                  | List of TLS Cipher to support                                                                                                                                   |
 
 ### Client object
 
@@ -96,4 +97,5 @@ This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 Inter
 
 ## Author Information
 
-- [Fritz Otlinghaus (Scriptkiddi)](https://github.com/scriptkiddi) _fritz.otlinghaus@stuvus.uni-stuttgart.de_
+* [Fritz Otlinghaus (Scriptkiddi)](https://github.com/scriptkiddi) _fritz.otlinghaus@stuvus.uni-stuttgart.de_
+* [Markus Mroch (Mr. Pi)](https://github.com/Mr-Pi) &lt;_markus.mroch@stuvus.uni-stuttgart.de_&gt;
