@@ -1,6 +1,11 @@
 #!/bin/sh
 # {{ ansible_managed }}
-brctl addbr {{ openvpn_bridge_dev }}; true
+set +e
+brctl addbr {{ openvpn_bridge_dev }}
+if [ $? != 0 ]; then
+	sleep 2
+	exec systemctl restart openvpn.service
+fi
 brctl addif {{ openvpn_bridge_dev }} {{ openvpn_dev }}; true
 brctl addif {{ openvpn_bridge_dev }} {{ openvpn_interface }}; true
 ip link set {{ openvpn_bridge_dev }} up;
