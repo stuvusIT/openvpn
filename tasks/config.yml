@@ -57,3 +57,7 @@
     name: "{{ openvpn_service_name }}"
     enabled: yes
     state: started
+
+- name: Set openvpn_base_dir for openvpn_client role
+  set_fact:
+    openvpn_base_dir: "{{ openvpn_base_dir }}"
