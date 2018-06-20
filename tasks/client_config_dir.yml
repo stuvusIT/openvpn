@@ -1,0 +1,5 @@
+- name: Write client configs to client-config-dir
+  template:
+    src: staticclient.j2
+    dest: "{{ openvpn_base_dir }}/staticclients/OpenVPN-Client-{{  inventory_hostname[:24]  }}-{{  item.name[:24]  }}"
+  when: item.ip_address is defined
