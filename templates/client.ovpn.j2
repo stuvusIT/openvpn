@@ -10,7 +10,9 @@ tls-version-min 1.2
 
 proto {{openvpn_proto}}
 remote {{openvpn_server_hostname}} {{openvpn_port}}
-{% if openvpn_use_bridge %}
+{% if openvpn_devtype %}
+dev {{ openvpn_devtype }}
+{% elif openvpn_use_bridge %}
 dev tap
 {% else %}
 dev tun
@@ -52,7 +54,7 @@ key-direction 1
 
 <key>
 {{ item.1.content|b64decode }}
-</key>   
+</key>
 {% endif %}
 
 

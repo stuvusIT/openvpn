@@ -25,7 +25,7 @@ This role requires an apt based system.
 | openvpn_use_modern_tls             | `true`                                           | Use modern Cipher for TLS encryption                                                                                                                            |
 | openvpn_verify_cn                  | `false`                                          | Check that the CN of the certificate matches the FQDN                                                                                                           |
 | openvpn_redirect_gateway           | `true`                                           | OpenVPN gateway push                                                                                                                                            |
-| openvpn_set_dns                    | `true`                                           | Will push DNS to the client
+| openvpn_set_dns                    | `true`                                           | Will push DNS to the client                                                                                                                                     |
 | openvpn_enable_management          | `true`                                           |                                                                                                                                                                 |
 | openvpn_management_bind            | `/var/run/openvpn/management unix`               | The interface to bind on for the management interface. Can be unix or TCP socket.                                                                               |
 | openvpn_management_client_user     | `root`                                           | Use this user when using a Unix socket for management interface.                                                                                                |
@@ -54,6 +54,9 @@ This role requires an apt based system.
 | openvpn_use_lzo                    | `true`                                           | Enable or disable compression.                                                                                                                                  |
 | openvpn_tls_cipher                 |                                                  | List of TLS Cipher to support                                                                                                                                   |
 | openvpn_client_cert_only_auth      | `false`                                          | Use only certificates to authenticate clients                                                                                                                   |
+| openvpn_use_bridge                 | `false`                                          | Use a bridge device with `tap` interface instead of the default `tun`.                                                                                          |
+| openvpn_devtype                    |                                                  | Specify the device type (`tun`/`tap`) to be used. If not set, it will be a tun device unless `openvpn_use_bridge` is set.                                       |
+| openvpn_dev                        | `tap0`                                           | The name of the generated device if `openvpn_devtype` is set.                                                                                                   |
 
 ### Client object
 
