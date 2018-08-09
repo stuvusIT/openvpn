@@ -117,9 +117,10 @@
     mode: 744
 
 - name: Ensure certificate revocation list database exists
-  file:
-    path: "{{openvpn_key_dir}}/index.txt"
-    state: touch
+  copy:
+    dest: "{{openvpn_key_dir}}/index.txt"
+    content: ""
+    force: no
 
 - name: Set up certificate revocation list
   command: sh revoke.sh
