@@ -80,7 +80,7 @@
     src: "{{ openvpn_base_dir }}/{{ item.name }}-{{ inventory_hostname }}.ovpn"
     dest: "/tmp/ansible/{{ item.name }}/{{ inventory_hostname }}.ovpn"
     flat: yes
-  when: openvpn_clients is defined
+  when: openvpn_fetch_configs and openvpn_clients is defined
   with_items: "{{ openvpn_clients }}"
 
 - name: Fetch public client config without certs
@@ -88,4 +88,4 @@
     src: "{{  openvpn_base_dir  }}/generell-{{ inventory_hostname }}.ovpn"
     dest: "/tmp/{{ inventory_hostname }}.ovpn"
     flat: yes
-  when: openvpn_ldap is defined
+  when: openvpn_fetch_configs and openvpn_ldap is defined

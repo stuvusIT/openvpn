@@ -57,6 +57,7 @@ This role requires an apt based system.
 | openvpn_use_bridge                 | `false`                                          | Use a bridge device with `tap` interface instead of the default `tun`.                                                                                          |
 | openvpn_devtype                    |                                                  | Specify the device type (`tun`/`tap`) to be used. If not set, it will be a tun device unless `openvpn_use_bridge` is set.                                       |
 | openvpn_dev                        | `tap0`                                           | The name of the generated device if `openvpn_devtype` is set.                                                                                                   |
+| openvpn_fetch_configs              | `true`                                           | Download client configurations from the server.                                                                                                                 |
 
 ### Client object
 
