@@ -6,7 +6,10 @@ proto {{openvpn_proto}}6
 {% else %}
 proto {{openvpn_proto}}
 {% endif %}
-{% if openvpn_use_bridge %}
+{% if openvpn_devtype is defined %}
+dev-type {{ openvpn_devtype }}
+dev {{ openvpn_dev }}
+{% elif openvpn_use_bridge %}
 dev tap
 {% else %}
 dev tun
