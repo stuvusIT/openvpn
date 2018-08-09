@@ -63,6 +63,8 @@
   with_together:
     - "{{ client_certs.results }}"
     - "{{ client_keys.results }}"
+  loop_control:
+    label: "{{ item.0.item }}"
 
 - name: Generate client config for ldap auth
   template:
