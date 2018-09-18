@@ -22,7 +22,7 @@ dh {{openvpn_key_dir}}/dh.pem
 {% if openvpn_crl_path is defined %}
 crl-verify {{openvpn_crl_path}}
 {% endif %}
-{% if openvpn_use_crl is defined %}
+{% if openvpn_use_crl %}
 crl-verify {{openvpn_key_dir}}/ca-crl.pem
 {% endif %}
 {% if openvpn_tls_auth_required %}
