@@ -1,4 +1,4 @@
-- name: Write client configs to client-config-dir
+- name: Write client configs to client-config-dir on host {{ item.name }}
   template:
     src: staticclient.j2
     dest: "{{ openvpn_base_dir }}/staticclients/OpenVPN-Client-{{ openvpn_server_hostname[:24] }}-{{ item.name[:24] }}"
