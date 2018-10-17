@@ -10,7 +10,7 @@ tls-version-min 1.2
 
 proto {{openvpn_proto}}
 remote {{openvpn_server_hostname}} {{openvpn_port}}
-{% if openvpn_devtype %}
+{% if openvpn_devtype is defined %}
 dev {{ openvpn_devtype }}
 {% elif openvpn_use_bridge %}
 dev tap
