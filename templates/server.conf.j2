@@ -51,6 +51,7 @@ server-ipv6 {{openvpn_server_ipv6_network}}
 {% endif %}
 {% if openvpn_use_bridge %}
 server-bridge {{ openvpn_bridge.gateway }} {{ openvpn_bridge.netmask }} {{ openvpn_bridge.dhcp_start }} {{ openvpn_bridge.dhcp_end }}
+script-security 2
 up up.sh
 {% endif %}
 
@@ -103,5 +104,5 @@ management-client-user {{openvpn_management_client_user}}
 {% if openvpn_ldap is defined|bool %}
 ### LDAP AUTH ###
 plugin /usr/lib/openvpn/openvpn-auth-ldap.so "{{ openvpn_base_dir }}/auth/ldap.conf"
-client-cert-not-required
+verify-client-cert optional
 {% endif %}
