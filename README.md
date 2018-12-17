@@ -64,8 +64,8 @@ This role requires an apt based system.
 | Variable   | Default / Mandatory    | Description                                                     |
 |------------|------------------------|-----------------------------------------------------------------|
 | name       | :heavy_check_mark:     | Name of the client. Has to be unique                            |
-| ip_address | :heavy_multiplication: | IP Address given to ifconfig-push                               |
-| subnet     | :heavy_multiplication: | Subnet given to ifconfig-push                                   |
+| ip_address | :heavy_multiplication_x: | IP Address given to ifconfig-push                               |
+| subnet     | :heavy_multiplication_x: | Subnet given to ifconfig-push                                   |
 | push       | `[]`                   | List of strings to be used with the push command for the client |
 
 ### LDAP object
