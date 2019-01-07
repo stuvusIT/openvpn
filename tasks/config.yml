@@ -12,6 +12,11 @@
   notify:
     - Restart openvpn
 
+- name: Ensure authentication folder exists
+  file:
+    name: /etc/openvpn/auth
+    state: directory
+
 - name: Install LDAP config
   template:
     src: ldap.conf.j2
@@ -36,7 +41,6 @@
 - name: Write client configs to client-config-dir
   include_tasks: client_config_dir.yml
   with_items: "{{ openvpn_clients }}"
-
 
 - name: Setup bridge
   when: openvpn_use_bridge
