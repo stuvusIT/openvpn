@@ -1,13 +1,15 @@
 #!/bin/sh
 # {{ ansible_managed }}
 set +e
-brctl addbr {{ openvpn_bridge_dev }}
+brctl addbr {{ openvpn_bridge_name }}; true
 if [ $? != 0 ]; then
 	sleep 2
 	exec systemctl restart openvpn.service
 fi
-brctl addif {{ openvpn_bridge_dev }} {{ openvpn_dev }}; true
-brctl addif {{ openvpn_bridge_dev }} {{ openvpn_interface }}; true
-ip link set {{ openvpn_bridge_dev }} up;
-ip link set {{ openvpn_dev }} up;
-ip address replace {{ openvpn_bridge.address }} dev {{ openvpn_bridge_dev }}; true
+brctl addif {{ openvpn_bridge_name }} tap0; true
+brctl addif {{ openvpn_bridge_name }} {{ openvpn_bridge_eth_interface }}; true
+ip link set {{ openvpn_bridge_name }} up;
+ip link set tap0 up;
+{% if openvpn_bridge_address is defined %}
+ip address replace {{ openvpn_bridge_address }} dev {{ openvpn_bridge_name }}; true
+{% endif %}
