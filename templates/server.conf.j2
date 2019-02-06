@@ -86,7 +86,7 @@ push "{{ opt }}"
 {% endif %}
 keepalive 5 30
 {% if openvpn_use_lzo %}
-comp-lzo
+comp-lzo yes
 {% endif %}
 persist-key
 persist-tun
