@@ -55,7 +55,7 @@
 - name: Generate client config
   template:
     src: client.ovpn.j2
-    dest: "{{ openvpn_base_dir }}/{{ item.0.item.name }}-{{ openvpn_server_hostname }}.ovpn"
+    dest: "{{ openvpn_base_dir }}/{{ item.0.item.name }}-{{ inventory_hostname }}.ovpn"
     owner: root
     group: root
     mode: 0400
@@ -69,7 +69,7 @@
 - name: Generate client config for ldap auth
   template:
     src: client.ovpn.j2
-    dest: "{{  openvpn_base_dir  }}/generell-{{ openvpn_server_hostname }}.ovpn"
+    dest: "{{  openvpn_base_dir  }}/login-{{ inventory_hostname }}.ovpn"
     owner: root
     group: root
     mode: 0400
@@ -77,15 +77,15 @@
 
 - name: Fetch client config
   fetch:
-    src: "{{ openvpn_base_dir }}/{{ item.name }}-{{ openvpn_server_hostname }}.ovpn"
-    dest: "/tmp/ansible/{{ item.name }}/{{ openvpn_server_hostname }}.ovpn"
+    src: "{{ openvpn_base_dir }}/{{ item.name }}-{{ inventory_hostname }}.ovpn"
+    dest: "/tmp/ansible/{{ item.name }}-{{ inventory_hostname }}.ovpn"
     flat: yes
   when: openvpn_fetch_configs and openvpn_clients is defined
   with_items: "{{ openvpn_clients }}"
 
 - name: Fetch public client config without certs
   fetch:
-    src: "{{  openvpn_base_dir  }}/generell-{{ openvpn_server_hostname }}.ovpn"
-    dest: "/tmp/{{ openvpn_server_hostname }}.ovpn"
+    src: "{{  openvpn_base_dir  }}/login-{{ inventory_hostname }}.ovpn"
+    dest: "/tmp/ansible/login-{{ inventory_hostname }}.ovpn"
     flat: yes
   when: openvpn_fetch_configs and openvpn_ldap is defined
