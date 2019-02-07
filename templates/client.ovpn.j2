@@ -7,7 +7,7 @@ dev tap
 {% else %}
 dev tun
 {% endif %}
-{% if not openvpn_client_cert_only_auth %}
+{% if item is not defined %}
 auth-user-pass
 {% endif %}
 auth {{ openvpn_auth_hash_algo }}
