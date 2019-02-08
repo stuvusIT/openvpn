@@ -42,3 +42,4 @@ openvpn_cipher: AES-256-CBC
 openvpn_use_lzo: true
 openvpn_default_client_push: []
 openvpn_fetch_configs: true
+openvpn_use_ldap: false
