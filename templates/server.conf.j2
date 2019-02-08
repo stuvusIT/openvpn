@@ -46,7 +46,7 @@ duplicate-cn
 {% if openvpn_bridge_enable_dhcp %}
 server-bridge {{ openvpn_bridge_dhcp_push_gateway }} {{ openvpn_bridge_dhcp_push_netmask }} {{ openvpn_bridge_dhcp_range_start }} {{ openvpn_bridge_dhcp_range_end }}
 {% else %}
-server-bridge
+server-bridge nogw
 {% endif %}
 script-security 2
 up up.sh
