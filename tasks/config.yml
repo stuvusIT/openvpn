@@ -42,6 +42,11 @@
   include_tasks: client_config_dir.yml
   with_items: "{{ openvpn_clients }}"
 
+- name: Check if iproute2 is available
+  shell: command -v ip >/dev/null 2>&1
+  register: openvpn_iproute2_command
+  failed_when: openvpn_iproute2_command.rc > 1
+
 - name: Setup bridge
   when: openvpn_use_bridge
   template:
