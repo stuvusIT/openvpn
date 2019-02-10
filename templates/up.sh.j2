@@ -6,10 +6,18 @@ if [ $? != 0 ]; then
 	sleep 2
 	exec systemctl restart openvpn.service
 fi
-brctl addif {{ openvpn_bridge_name }} tap0; true
+brctl addif {{ openvpn_bridge_name }} $1; true
 brctl addif {{ openvpn_bridge_name }} {{ openvpn_bridge_eth_interface }}; true
-ip link set {{ openvpn_bridge_name }} up;
-ip link set tap0 up;
+if command -v ip >/dev/null 2>&1; then
+	ip link set {{ openvpn_bridge_name }} up
+	ip link set $1 up
 {% if openvpn_bridge_address is defined %}
-ip address replace {{ openvpn_bridge_address }} dev {{ openvpn_bridge_name }}; true
+	ip address replace {{ openvpn_bridge_address }} dev {{ openvpn_bridge_name }}; true
 {% endif %}
+else
+	ifconfig {{ openvpn_bridge_name }} up
+	ifconfig $1 up
+{% if openvpn_bridge_address is defined %}
+	ifconfig {{ openvpn_bridge_name }} {{ openvpn_bridge_address }}; true
+{% endif %}
+fi
