@@ -6,15 +6,16 @@ proto {{openvpn_proto}}6
 {% else %}
 proto {{openvpn_proto}}
 {% endif %}
-{% if openvpn_devtype is defined %}
-dev-type {{ openvpn_devtype }}
-dev {{ openvpn_dev }}
-{% elif openvpn_use_bridge %}
+{% if openvpn_use_bridge %}
 dev tap
 {% else %}
 dev tun
 {% endif %}
 
+mode server
+tls-server
+auth {{ openvpn_auth_hash_algo }}
+cipher {{ openvpn_cipher }}
 ca {{openvpn_key_dir}}/ca.crt
 cert {{openvpn_key_dir}}/server.crt
 key {{openvpn_key_dir}}/server.key
@@ -28,9 +29,6 @@ crl-verify {{openvpn_key_dir}}/ca-crl.pem
 {% if openvpn_tls_auth_required %}
 tls-auth {{openvpn_key_dir}}/ta.key 0
 {% endif %}
-tls-server
-auth {{ openvpn_auth_hash_algo }}
-cipher {{ openvpn_cipher }}
 {% if openvpn_use_modern_tls|bool %}
 {# Using Mozilla's modern cipher list + DHE for older clients #}
 tls-version-min 1.2
@@ -42,23 +40,33 @@ tls-cipher {{ openvpn_tls_cipher|join(':') }}
 duplicate-cn
 {% endif %}
 
-
-{% if openvpn_server_network and not openvpn_use_bridge %}
-server {{openvpn_server_network}} {{openvpn_server_netmask}}
-{% if openvpn_server_ipv6_network is defined %}
-server-ipv6 {{openvpn_server_ipv6_network}}
+{%
+  if openvpn_use_bridge
+%}
+{% if openvpn_bridge_enable_dhcp %}
+server-bridge {{ openvpn_bridge_dhcp_push_gateway }} {{ openvpn_bridge_dhcp_push_netmask }} {{ openvpn_bridge_dhcp_range_start }} {{ openvpn_bridge_dhcp_range_end }}
+{% else %}
+server-bridge nogw
 {% endif %}
-{% endif %}
-{% if openvpn_use_bridge %}
-server-bridge {{ openvpn_bridge.gateway }} {{ openvpn_bridge.netmask }} {{ openvpn_bridge.dhcp_start }} {{ openvpn_bridge.dhcp_end }}
 script-security 2
 up up.sh
+{%
+  else
+%}
+server {{openvpn_tunnel_network}} {{openvpn_tunnel_netmask}}
+{% if openvpn_tunnel_ipv6_network is defined %}
+server-ipv6 {{openvpn_tunnel_ipv6_network}}
 {% endif %}
+{%
+  endif
+%}
 
 {% if openvpn_topology is defined %}
 topology {{openvpn_topology}}
 {% endif %}
+{% if openvpn_bridge_enable_dhcp %}
 ifconfig-pool-persist ipp.txt
+{% endif %}
 {% if openvpn_clients %}
 client-config-dir {{ openvpn_base_dir }}/staticclients
 {% endif %}
@@ -78,7 +86,7 @@ push "{{ opt }}"
 {% endif %}
 keepalive 5 30
 {% if openvpn_use_lzo %}
-comp-lzo
+comp-lzo yes
 {% endif %}
 persist-key
 persist-tun
@@ -101,7 +109,7 @@ management-client-user {{openvpn_management_client_user}}
 {% endif %}
 {% endif %}
 
-{% if openvpn_ldap is defined|bool %}
+{% if openvpn_use_ldap|bool %}
 ### LDAP AUTH ###
 plugin /usr/lib/openvpn/openvpn-auth-ldap.so "{{ openvpn_base_dir }}/auth/ldap.conf"
 verify-client-cert optional

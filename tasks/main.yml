@@ -18,7 +18,7 @@
   sysctl:
     name: net.ipv6.conf.all.forwarding
     value: 1
-  when: openvpn_server_ipv6_network is defined
+  when: openvpn_tunnel_ipv6_network is defined
 
 - name: Generate client configs
   include_tasks: client_keys.yml

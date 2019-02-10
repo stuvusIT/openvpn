@@ -15,33 +15,31 @@ openvpn_set_dns: true
 openvpn_enable_management: false
 openvpn_management_bind: /var/run/openvpn/management unix
 openvpn_management_client_user: root
-openvpn_server_network: 10.9.0.0
-openvpn_server_netmask: 255.255.255.0
 openvpn_tls_auth_required: true
 openvpn_clients: []
 openvpn_push: []
 openvpn_client_register_dns: true
 openvpn_use_crl: false
 openvpn_duplicate_cn: false
-openvpn_dev: tap0
-openvpn_interface: eth0
 openvpn_use_bridge: false
-openvpn_bridge:
-  address: 192.168.0.1
-  netmask: 255.255.255.0
-  network: 192.168.0.0
-  broadcast: 192.168.0.255
-  dhcp_start: 192.168.0.2
-  dhcp_end: 192.168.0.254
-openvpn_bridge_dev: br0
+openvpn_tunnel_network: 10.9.0.0
+openvpn_tunnel_netmask: 255.255.255.0
+openvpn_bridge_name: br0
+openvpn_bridge_eth_interface: eth0
+openvpn_bridge_address: 192.168.0.2
+openvpn_bridge_enable_dhcp: true
+openvpn_bridge_push_gateway: 192.168.0.1
+openvpn_bridge_push_netmask: 255.255.255.0
+openvpn_bridge_dhcp_range_start: 192.168.0.128
+openvpn_bridge_dhcp_range_end: 192.168.0.254
 openvpn_dns_servers:
-  - "8.8.8.8"
-  - "8.8.4.4"
+  - 8.8.8.8
+  - 8.8.4.4
 openvpn_openssl_digest: sha256
 openvpn_openssl_days: 3650
 openvpn_auth_hash_algo: SHA256
 openvpn_cipher: AES-256-CBC
 openvpn_use_lzo: true
 openvpn_default_client_push: []
-openvpn_client_cert_only_auth: false
 openvpn_fetch_configs: true
+openvpn_use_ldap: false
