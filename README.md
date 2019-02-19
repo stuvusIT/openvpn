@@ -109,7 +109,7 @@ The following variables are only relevant if you chose *bridging) (i.e. `openvpn
 | ---------------------------------- | --------------- | ----------------------------------------------------------------------------------- |
 | `openvpn_bridge_name`              | `br0`           | Name of the bridge                                                                  |
 | `openvpn_bridge_eth_interface`     | `eth0`          | Ethernet interface that's connected to the bridge                                   |
-| `openvpn_bridge_address`           | `192.168.0.2`   | IP address of the bridge interface. Defaults to no IP address being configured.     |
+| `openvpn_bridge_address`           |                 | IP address of the bridge interface. Defaults to no IP address being configured.     |
 | `openvpn_bridge_enable_dhcp`       | `true`          | Enable OpenVPN's own DHCP server                                                    |
 | `openvpn_bridge_dhcp_push_gateway` | `192.168.0.1`   | Relevant if `openvpn_bridge_enable_dhcp` is `true`. Gateway address for the clients |
 | `openvpn_bridge_dhcp_push_netmask` | `255.255.255.0` | Relevant if `openvpn_bridge_enable_dhcp` is `true`. Netmask of the bridge network   |
