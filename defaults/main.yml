@@ -26,7 +26,6 @@ openvpn_tunnel_network: 10.9.0.0
 openvpn_tunnel_netmask: 255.255.255.0
 openvpn_bridge_name: br0
 openvpn_bridge_eth_interface: eth0
-openvpn_bridge_address: 192.168.0.2
 openvpn_bridge_enable_dhcp: true
 openvpn_bridge_push_gateway: 192.168.0.1
 openvpn_bridge_push_netmask: 255.255.255.0
