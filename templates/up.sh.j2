@@ -1,6 +1,7 @@
 #!/bin/sh
 # {{ ansible_managed }}
 set +e
+
 brctl addbr {{ openvpn_bridge_name }}; true
 if [ $? != 0 ]; then
     sleep 2
@@ -8,18 +9,28 @@ if [ $? != 0 ]; then
 fi
 brctl addif {{ openvpn_bridge_name }} $1; true
 brctl addif {{ openvpn_bridge_name }} {{ openvpn_bridge_eth_interface }}; true
-{% if openvpn_iproute2_command.rc == 0 %}
+
+{%- if openvpn_iproute2_command.rc == 0 %}
+
 ip link set {{ openvpn_bridge_name }} up
 ip link set $1 up
     {%- if openvpn_bridge_address is defined %}
 
 ip address replace {{ openvpn_bridge_address }} dev {{ openvpn_bridge_name }}; true
     {%- endif %}
-{% else %}
+
+{%- else %}
+
 ifconfig {{ openvpn_bridge_name }} up
 ifconfig $1 up
 	{%- if openvpn_bridge_address is defined %}
 
 ifconfig {{ openvpn_bridge_name }} {{ openvpn_bridge_address }}; true
     {%- endif %}
-{% endif %}
+
+{%- endif %}
+
+{% for command in openvpn_up_commands %}
+    {{- command }}
+
+{% endfor %}
