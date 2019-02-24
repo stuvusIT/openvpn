@@ -117,3 +117,8 @@ mute-replay-warnings
 plugin /usr/lib/openvpn/openvpn-auth-ldap.so "{{ openvpn_base_dir }}/auth/ldap.conf"
 verify-client-cert optional
 {% endif %}
+
+{% for line in openvpn_extra_config %}
+    {{- line }}
+
+{% endfor %}

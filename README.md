@@ -46,6 +46,8 @@ This role requires an apt based system.
 | `openvpn_use_lzo`                    | `true`                             | Enable or disable compression.                                                                                                                                     |
 | `openvpn_tls_cipher`                 |                                    | List of TLS Cipher to support                                                                                                                                      |
 | `openvpn_fetch_configs`              | `true`                             | Download client configurations from the server.                                                                                                                    |
+| `openvpn_up_commands`                | `[]`                               | Commands ran when the OpenVPN TAP/TUN interface goes up                                                                                                            |
+| `openvpn_extra_config`               | `[]`                               | Extra lines added to the server configuration                                                                                                                      |
 
 ### Client objects
 
