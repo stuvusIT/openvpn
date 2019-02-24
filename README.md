@@ -57,7 +57,7 @@ A client object is a dictionary that can contain the following keys.
 | ------------ | ------------------------ | ---------------------------------------------------------------------- |
 | `name`       | :heavy_check_mark:       | Name of the client. Has to be unique.                                  |
 | `ip_address` | :heavy_multiplication_x: | IP address given to the client via `ifconfig-push`                     |
-| `netmask`    | :heavy_multiplication_x: | Netmask if that IP address                                             |
+| `netmask`    | :heavy_multiplication_x: | Netmask of that IP address                                             |
 | `push`       | :heavy_multiplication_x: | Miscellaneous strings to be used with the `push` command to the client |
 
 ### LDAP

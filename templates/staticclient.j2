@@ -1,4 +1,4 @@
-ifconfig-push {{ item.ip_address }} {{ item.subnet }}
+ifconfig-push {{ item.ip_address }} {{ item.netmask }}
 {% for push_option in item.push | default(openvpn_default_client_push) %}
 push "{{ push_option }}"
 {% endfor %}
