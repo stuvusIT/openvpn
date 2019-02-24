@@ -12,8 +12,6 @@ server-bridge nogw
     {%- endif %}
 
 dev tap
-script-security 2
-up up.sh
 {% else %}
 server {{openvpn_tunnel_network}} {{openvpn_tunnel_netmask}}
     {%- if openvpn_tunnel_ipv6_network is defined %}
@@ -80,7 +78,7 @@ verb 3
 # up-script
 
 script-security 2
-up up.sh
+up {{ openvpn_base_dir }}/up.sh
 
 # Other configured options:
 
