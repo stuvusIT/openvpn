@@ -44,3 +44,4 @@ openvpn_fetch_configs: true
 openvpn_use_ldap: false
 openvpn_up_commands: []
 openvpn_extra_config: []
+openvpn_extra_client_config: []
