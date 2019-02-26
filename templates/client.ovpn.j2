@@ -53,3 +53,8 @@ key-direction 1
 {{ item.1.content|b64decode }}
 </key>
 {% endif %}
+
+{% for line in openvpn_extra_client_config %}
+    {{- line }}
+
+{% endfor %}
