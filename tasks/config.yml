@@ -10,7 +10,7 @@
     owner: root
     group: root
   notify:
-    - Restart openvpn
+    - Restart OpenVPN service
 
 - name: Ensure authentication folder exists
   file:
