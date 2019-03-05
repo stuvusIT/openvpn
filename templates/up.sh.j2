@@ -3,6 +3,7 @@
 set +e
 
 {% if openvpn_use_bridge %}
+# Setup OpenVPN bridge (TAP)
 
 brctl addbr {{ openvpn_bridge_name }}; true
 if [ $? != 0 ]; then
@@ -34,6 +35,7 @@ ifconfig {{ openvpn_bridge_name }} {{ openvpn_bridge_address }}; true
 
 {% endif %}
 
+# User-defined up-commands
 {% for command in openvpn_up_commands %}
     {{- command }}
 
