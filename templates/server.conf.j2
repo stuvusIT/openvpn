@@ -1,122 +1,128 @@
 # {{ ansible_managed }}
 
-port {{openvpn_port}}
+# Required:
+
+{% if openvpn_use_bridge %}
+    {%- if openvpn_bridge_enable_dhcp %}
+
+server-bridge {{ openvpn_bridge_dhcp_push_gateway }} {{ openvpn_bridge_dhcp_push_netmask }} {{ openvpn_bridge_dhcp_range_start }} {{ openvpn_bridge_dhcp_range_end }}
+    {%- else %}
+
+server-bridge nogw
+    {%- endif %}
+
+dev tap
+{% else %}
+server {{openvpn_tunnel_network}} {{openvpn_tunnel_netmask}}
+    {%- if openvpn_tunnel_ipv6_network is defined %}
+
+server-ipv6 {{openvpn_tunnel_ipv6_network}}
+    {%- endif %}
+
+dev tun
+{% endif %}
 {% if openvpn_dualstack %}
 proto {{openvpn_proto}}6
 {% else %}
 proto {{openvpn_proto}}
 {% endif %}
-{% if openvpn_use_bridge %}
-dev tap
-{% else %}
-dev tun
-{% endif %}
-
-mode server
-tls-server
+port {{ openvpn_port }}
 auth {{ openvpn_auth_hash_algo }}
 cipher {{ openvpn_cipher }}
-ca {{openvpn_key_dir}}/ca.crt
-cert {{openvpn_key_dir}}/server.crt
-key {{openvpn_key_dir}}/server.key
-dh {{openvpn_key_dir}}/dh.pem
-{% if openvpn_crl_path is defined %}
-crl-verify {{openvpn_crl_path}}
-{% endif %}
-{% if openvpn_use_crl %}
-crl-verify {{openvpn_key_dir}}/ca-crl.pem
-{% endif %}
-{% if openvpn_tls_auth_required %}
-tls-auth {{openvpn_key_dir}}/ta.key 0
-{% endif %}
-{% if openvpn_use_modern_tls|bool %}
-{# Using Mozilla's modern cipher list + DHE for older clients #}
-tls-version-min 1.2
-{% if openvpn_tls_cipher is defined %}
-tls-cipher {{ openvpn_tls_cipher|join(':') }}
-{% endif %}
-{% endif %}
+
+# Crypto:
+
 {% if openvpn_duplicate_cn|bool %}
 duplicate-cn
 {% endif %}
-
-{%
-  if openvpn_use_bridge
-%}
-{% if openvpn_bridge_enable_dhcp %}
-server-bridge {{ openvpn_bridge_dhcp_push_gateway }} {{ openvpn_bridge_dhcp_push_netmask }} {{ openvpn_bridge_dhcp_range_start }} {{ openvpn_bridge_dhcp_range_end }}
-{% else %}
-server-bridge nogw
+dh {{ openvpn_key_dir }}/dh.pem
+ca {{ openvpn_key_dir }}/ca.crt
+cert {{ openvpn_key_dir }}/server.crt
+key {{ openvpn_key_dir }}/server.key
+{% if openvpn_use_crl %}
+crl-verify {{ openvpn_key_dir }}/ca-crl.pem
 {% endif %}
-script-security 2
-up up.sh
-{%
-  else
-%}
-server {{openvpn_tunnel_network}} {{openvpn_tunnel_netmask}}
-{% if openvpn_tunnel_ipv6_network is defined %}
-server-ipv6 {{openvpn_tunnel_ipv6_network}}
+{% if openvpn_crl_path is defined %}
+crl-verify {{ openvpn_crl_path }}
 {% endif %}
-{%
-  endif
-%}
-
-{% if openvpn_topology is defined %}
-topology {{openvpn_topology}}
+{% if openvpn_tls_auth_required %}
+tls-auth {{ openvpn_key_dir }}/ta.key 0
 {% endif %}
-{% if openvpn_bridge_enable_dhcp %}
-ifconfig-pool-persist ipp.txt
-{% endif %}
-{% if openvpn_clients %}
-client-config-dir {{ openvpn_base_dir }}/staticclients
-{% endif %}
-
-{% if openvpn_redirect_gateway|bool %}
-push "redirect-gateway def1 bypass-dhcp"
-{% endif %}
-{% if openvpn_set_dns %}
-{% for dns in openvpn_dns_servers %}
-push "dhcp-option DNS {{ dns }}"
-{% endfor %}
-{%endif %}
-{% if openvpn_push is defined %}
-{% for opt in openvpn_push %}
-push "{{ opt }}"
-{% endfor %}
-{% endif %}
-keepalive 5 30
-{% if openvpn_use_lzo %}
-comp-lzo yes
-{% endif %}
-persist-key
-persist-tun
-user nobody
-group nogroup
-
-status openvpn-status.log
-log-append /var/log/openvpn.log
-verb 3
-
 {% if openvpn_verify_cn|bool %}
 verify-x509-name OpenVPN-Client-{{ openvpn_server_hostname[:24] }} name-prefix
 remote-cert-tls client
 {% endif %}
+{% if openvpn_use_modern_tls|bool %}
+{# Using Mozilla's modern cipher list + DHE for older clients #}
+tls-version-min 1.2
+    {%- if openvpn_tls_cipher is defined %}
 
+tls-cipher {{ openvpn_tls_cipher|join(':') }}
+    {%- endif %}
+{% endif %}
+
+
+# Miscellaneous:
+
+ifconfig-pool-persist ipp.txt
+keepalive 5 30
+persist-key
+persist-tun
+user nobody
+group nogroup
+status openvpn-status.log
+log-append /var/log/openvpn.log
+mute-replay-warnings
+verb 3
+
+# up-script
+
+script-security 2
+up {{ openvpn_base_dir }}/up.sh
+
+# Other configured options:
+
+{% if openvpn_topology is defined %}
+topology {{openvpn_topology}}
+{% endif %}
+{% if openvpn_clients %}
+client-config-dir {{ openvpn_base_dir }}/staticclients
+{% endif %}
+{% if openvpn_use_lzo %}
+comp-lzo yes
+{% endif %}
 {% if openvpn_enable_management|bool %}
 management {{openvpn_management_bind}}
     {%- if openvpn_management_client_user %}
 
 management-client-user {{openvpn_management_client_user}}
     {%- endif %}
-
 {% endif %}
-mute-replay-warnings
+{% if openvpn_redirect_gateway|bool %}
+push "redirect-gateway def1 bypass-dhcp"
+{%- endif %}
+{%- if openvpn_set_dns %}
+    {%- for dns in openvpn_dns_servers %}
+
+push "dhcp-option DNS {{ dns }}"
+    {%- endfor %}
+{% endif %}
+{%- if openvpn_push is defined %}
+    {%- for opt in openvpn_push %}
+
+push "{{ opt }}"
+    {%- endfor %}
+{% endif %}
 
 {% if openvpn_use_ldap|bool %}
-### LDAP AUTH ###
+
+# LDAP authentication
+
 plugin /usr/lib/openvpn/openvpn-auth-ldap.so "{{ openvpn_base_dir }}/auth/ldap.conf"
 verify-client-cert optional
 {% endif %}
+
+# Extra config
 
 {% for line in openvpn_extra_config %}
     {{- line }}
