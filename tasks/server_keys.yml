@@ -93,7 +93,7 @@
     dest: "{{ openvpn_key_dir }}/ca.conf"
     owner: root
     group: root
-    mode: 744
+    mode: 0644
 
 - name: Create initial certificate revocation list squence number
   shell: "echo 00 > crl_number"
@@ -114,7 +114,7 @@
     dest: "{{openvpn_key_dir}}/revoke.sh"
     owner: root
     group: root
-    mode: 744
+    mode: 0744
 
 - name: Ensure certificate revocation list database exists
   copy:
