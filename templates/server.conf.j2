@@ -64,7 +64,9 @@ tls-cipher {{ openvpn_tls_cipher|join(':') }}
 
 # Miscellaneous:
 
+{% if not openvpn_use_bridge or openvpn_bridge_enable_dhcp %}
 ifconfig-pool-persist ipp.txt
+{% endif %}
 keepalive 5 30
 persist-key
 persist-tun
