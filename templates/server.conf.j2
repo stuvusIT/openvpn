@@ -13,7 +13,8 @@ server-bridge nogw
 
 dev tap
 {% else %}
-server {{openvpn_tunnel_network}} {{openvpn_tunnel_netmask}}
+server {{openvpn_tunnel_network}} {{openvpn_tunnel_netmask}} nopool
+ifconfig-pool {{openvpn_tunnel_dhcp_range_start}} {{openvpn_tunnel_dhcp_range_end}}
     {%- if openvpn_tunnel_ipv6_network is defined %}
 
 server-ipv6 {{openvpn_tunnel_ipv6_network}}
