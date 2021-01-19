@@ -7,7 +7,7 @@ dev tap
 {% else %}
 dev tun
 {% endif %}
-{% if item is not defined %}
+{% if item is not defined or openvpn_use_ldap %}
 auth-user-pass
 {% endif %}
 auth {{ openvpn_auth_hash_algo }}

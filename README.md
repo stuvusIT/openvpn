@@ -98,10 +98,12 @@ The `openvpn_use_bridge` role variable lets you chose between [routing and bridg
 
 The following variables are only relevant if you chose *routing* (i.e. `openvpn_use_bridge` is `false`).
 
-| Role variable            | Default         | Description                             |
-| ------------------------ | --------------- | --------------------------------------- |
-| `openvpn_tunnel_network` | `10.9.0.0`      | Private network used by OpenVPN service |
-| `openvpn_tunnel_netmask` | `255.255.255.0` | Netmask of the private network          |
+| Role variable                     | Default         | Description                             |
+| --------------------------------- | --------------- | --------------------------------------- |
+| `openvpn_tunnel_network`          | `10.9.0.0`      | Private network used by OpenVPN service |
+| `openvpn_tunnel_netmask`          | `255.255.255.0` | Netmask of the private network          |
+| `openvpn_tunnel_dhcp_range_start` | `10.9.0.2`      | Start of the DHCP range                 |
+| `openvpn_tunnel_dhcp_range_end`   | `10.9.0.253`    | End of the DHCP range                   |
 
 #### Bridging
 
