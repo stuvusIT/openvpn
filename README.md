@@ -28,10 +28,9 @@ This role requires an apt based system.
 | `openvpn_management_bind`            | `/var/run/openvpn/management unix` | The interface to bind on for the management interface. Can be unix or TCP socket.                                                                                  |
 | `openvpn_management_client_user`     | `root`                             | Use this user when using a Unix socket for management interface.                                                                                                   |
 | `openvpn_tls_auth_required`          | `true`                             | Ask the client to push the generated ta.key of the server during the   connection                                                                                  |
-| `openvpn_tunnel_ipv6_network`        | `false`                            | The network address and prefix of an IPv6 network to assign to clients. IPv4 would still be used, too.                                                             |
 | `openvpn_ca_key`                     |                                    | CA key containing both crt and the private key. If not set, CA cert and key will be automatically generated on the target system.                                  |
 | `openvpn_tls_auth_key`               |                                    | Single item with a pre-generated TLS authentication key.                                                                                                           |
-| `openvpn_topology`                   | `false`                            | the `topology` keyword will be set in the server config with   the specified value.                                                                                |
+| `openvpn_topology`                   |                                    | the `topology` keyword will be set in the server config with   the specified value.                                                                                |
 | `openvpn_push`                       | `empty`                            | Set here a list of string that will be placed as `push "<string>"`. E.g. `- route 10.20.30.0 255.255.255.0` will generate `push "route 10.20.30.0 255.255.255.0"`. |
 | `openvpn_crl_path`                   |                                    | Define a path to the CRL file for revocations.                                                                                                                     |
 | `openvpn_use_crl`                    | `false`                            | Configure OpenVPN server to honor certificate revocation list.                                                                                                     |
@@ -98,12 +97,13 @@ The `openvpn_use_bridge` role variable lets you chose between [routing and bridg
 
 The following variables are only relevant if you chose *routing* (i.e. `openvpn_use_bridge` is `false`).
 
-| Role variable                     | Default         | Description                             |
-| --------------------------------- | --------------- | --------------------------------------- |
-| `openvpn_tunnel_network`          | `10.9.0.0`      | Private network used by OpenVPN service |
-| `openvpn_tunnel_netmask`          | `255.255.255.0` | Netmask of the private network          |
-| `openvpn_tunnel_dhcp_range_start` | `10.9.0.2`      | Start of the DHCP range                 |
-| `openvpn_tunnel_dhcp_range_end`   | `10.9.0.253`    | End of the DHCP range                   |
+| Role variable                             | Required/Default         | Description                                |
+| ----------------------------------------- | ------------------------ | ------------------------------------------ |
+| `openvpn_tunnel_subnetv4`                 | `10.9.0.0/24`            | Private IPv4 subnet inside the tunnel      |
+| `openvpn_tunnel_subnetv6`                 | :heavy_multiplication_x: | Private IPv6 subnet inside the tunnel      |
+| `openvpn_tunnel_dynamic_ipv4_range_start` | `2`                      | Offset where the dynamic IPv4 range starts |
+| `openvpn_tunnel_dynamic_ipv4_range_end`   | `253`                    | Offset where the dynamic IPv4 range ends   |
+| `openvpn_tunnel_dynamic_ipv6_range_start` | `::f:0:0:0`              | Offset where the dynamic IPv6 range starts |
 
 #### Bridging
 
