@@ -21,9 +21,9 @@ server {{ openvpn_tunnel_subnetv4 | ansible.netcommon.ipaddr('network') }} {{ op
 ifconfig-pool {{ ipv4_range_start }} {{ ipv4_range_end }}
     {%- if openvpn_tunnel_subnetv6 is defined %}
 
-{% set ipv6_range_start = openvpn_tunnel_subnetv6 | ansible.netcommon.ipaddr(openvpn_tunnel_dynamic_ipv6_range_start | ansible.netcommon.ipaddr('int')) %}
+{% set ipv6_range_start = openvpn_tunnel_subnetv6 | ansible.netcommon.nthhost(openvpn_tunnel_dynamic_ipv6_range_start | ansible.netcommon.ipaddr('int')) %}
 {% set ipv6_range_start = (ipv6_range_start if ipv6_range_start) | mandatory("openvpn_tunnel_dynamic_ipv6_range_start '{}' is not in range '{}'".format(openvpn_tunnel_dynamic_ipv6_range_start, openvpn_tunnel_subnetv6)) %}
-ifconfig-ipv6 {{ openvpn_tunnel_subnetv6 | ansible.netcommon.nthhost(1) }} {{ openvpn_tunnel_subnetv6 | ansible.netcommon.nthhost(2) }}
+ifconfig-ipv6 {{ openvpn_tunnel_subnetv6 | ansible.netcommon.ipaddr(1) }} {{ openvpn_tunnel_subnetv6 | ansible.netcommon.nthhost(2) }}
 ifconfig-ipv6-pool {{ ipv6_range_start }}
 push tun-ipv6
     {%- endif %}
