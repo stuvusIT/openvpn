@@ -14,16 +14,16 @@ server-bridge nogw
 dev tap
 {% else %}
 server {{ openvpn_tunnel_subnetv4 | ipaddr('network') }} {{ openvpn_tunnel_subnetv4 | ipaddr('netmask') }} nopool
-{% set ipv4_range_start = openvpn_tunnel_subnetv4 | ipaddr(openvpn_tunnel_dynamic_ipv4_range_start | ipaddr('int')) %}
-{% set ipv4_range_start = (ipv4_range_start | ipaddr('address') if ipv4_range_start) | mandatory("openvpn_tunnel_dynamic_ipv4_range_start '{}' is not in range '{}'".format(openvpn_tunnel_dynamic_ipv4_range_start, openvpn_tunnel_subnetv4)) %}
-{% set ipv4_range_end = openvpn_tunnel_subnetv4 | ipaddr(openvpn_tunnel_dynamic_ipv4_range_end | ipaddr('int')) %}
-{% set ipv4_range_end = (ipv4_range_end | ipaddr('address') if ipv4_range_end) | mandatory("openvpn_tunnel_dynamic_ipv4_range_end '{}' is not in range '{}'".format(openvpn_tunnel_dynamic_ipv4_range_end, openvpn_tunnel_subnetv4)) %}
+{% set ipv4_range_start = openvpn_tunnel_subnetv4 | nthhost(openvpn_tunnel_dynamic_ipv4_range_start | ipaddr('int')) %}
+{% set ipv4_range_start = (ipv4_range_start if ipv4_range_start) | mandatory("openvpn_tunnel_dynamic_ipv4_range_start '{}' is not in range '{}'".format(openvpn_tunnel_dynamic_ipv4_range_start, openvpn_tunnel_subnetv4)) %}
+{% set ipv4_range_end = openvpn_tunnel_subnetv4 | nthhost(openvpn_tunnel_dynamic_ipv4_range_end | ipaddr('int')) %}
+{% set ipv4_range_end = (ipv4_range_end if ipv4_range_end) | mandatory("openvpn_tunnel_dynamic_ipv4_range_end '{}' is not in range '{}'".format(openvpn_tunnel_dynamic_ipv4_range_end, openvpn_tunnel_subnetv4)) %}
 ifconfig-pool {{ ipv4_range_start }} {{ ipv4_range_end }}
     {%- if openvpn_tunnel_subnetv6 is defined %}
 
 {% set ipv6_range_start = openvpn_tunnel_subnetv6 | ipaddr(openvpn_tunnel_dynamic_ipv6_range_start | ipaddr('int')) %}
 {% set ipv6_range_start = (ipv6_range_start if ipv6_range_start) | mandatory("openvpn_tunnel_dynamic_ipv6_range_start '{}' is not in range '{}'".format(openvpn_tunnel_dynamic_ipv6_range_start, openvpn_tunnel_subnetv6)) %}
-ifconfig-ipv6 {{ openvpn_tunnel_subnetv6 | ipmath(1) }} {{ openvpn_tunnel_subnetv6 | ipmath(2) }}
+ifconfig-ipv6 {{ openvpn_tunnel_subnetv6 | nthhost(1) }} {{ openvpn_tunnel_subnetv6 | nthhost(2) }}
 ifconfig-ipv6-pool {{ ipv6_range_start }}
 push tun-ipv6
     {%- endif %}
