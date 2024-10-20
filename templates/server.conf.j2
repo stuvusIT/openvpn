@@ -110,7 +110,7 @@ management-client-user {{openvpn_management_client_user}}
     {%- endif %}
 {% endif %}
 {% if openvpn_redirect_gateway|bool %}
-push "redirect-gateway def1 bypass-dhcp"
+push "redirect-gateway def1 bypass-dhcp ipv6"
 {%- endif %}
 {%- if openvpn_set_dns %}
     {%- for dns in openvpn_dns_servers %}
