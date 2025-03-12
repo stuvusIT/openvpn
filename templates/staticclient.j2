@@ -1,4 +1,9 @@
-ifconfig-push {{ item.ip_address }} {{ item.netmask }}
+{% if item.ipv4 is defined %}
+ifconfig-push {{ item.ipv4 }} {{ openvpn_tunnel_subnetv4 | ansible.utils.ipaddr('netmask') }}
+{% endif %}
+{% if item.ipv6 is defined %}
+ifconfig-ipv6-push {{ item.ipv6 }}/{{ openvpn_tunnel_subnetv6 | ansible.utils.ipaddr('prefix') }} {{ openvpn_tunnel_subnetv6 | ansible.utils.nthhost(2) }}
+{% endif %}
 {% for push_option in item.push | default(openvpn_default_client_push) %}
 push "{{ push_option }}"
 {% endfor %}
